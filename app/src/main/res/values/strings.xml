@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TMDB</string>
+    <string name="f1">Hello 1</string>
+    <string name="f2">Hello 2</string>
+    <string name="f3">Hello 3</string>
+    <string name="movieImageDescription">movieImageDescription</string>
+</resources>
