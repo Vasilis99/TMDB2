@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.vasilis.tmdb.adapters.VPAdapter
 import com.vasilis.tmdb.views.MyView
 import com.google.android.material.tabs.TabLayoutMediator
 
