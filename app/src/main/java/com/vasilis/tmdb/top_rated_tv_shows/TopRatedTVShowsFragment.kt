@@ -9,53 +9,52 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.vasilis.tmdb.favorites.FavoriteManager
 import com.vasilis.tmdb.MainActivity
 import com.vasilis.tmdb.MyApi
 import com.vasilis.tmdb.RetrofitHelper
 import com.vasilis.tmdb.TMDB
-import com.vasilis.tmdb.tv_show.TVShowsAdapter
+import com.vasilis.tmdb.favorites.FavoriteManager
 import com.vasilis.tmdb.tv_show.TVShowFragment
-
+import com.vasilis.tmdb.tv_show.TVShowsAdapter
 
 class TopRatedTVShowsFragment : Fragment() {
     lateinit var tvShows: MutableList<TMDB.TVShowBasic>
     lateinit var favorites: FavoriteManager
-    var pageCount=1
-    private var totalPages=0
+    var pageCount = 1
+    private var totalPages = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         println("Top rated tvShow Fragment")
-        if(savedInstanceState==null){
+        if (savedInstanceState == null) {
             println("einai null")
-        }
-        else{
+        } else {
             println("NOOOOO")
         }
-        tvShows= mutableListOf()
+        tvShows = mutableListOf()
     }
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.context.let {
         TopRatedTVShowsView(it).apply {
             val myApi = RetrofitHelper.getInstance().create(MyApi::class.java)
             lifecycleScope.launchWhenResumed {
                 shimmer.startShimmer()
-                title.text="Top rated TV Shows"
-                val response = myApi.getTopTVShows("287f6ab6616e3724955e2b4c6841ea63",1)
-                totalPages=response.body()!!.total_pages
+                title.text = "Top rated TV Shows"
+                val response = myApi.getTopTVShows("287f6ab6616e3724955e2b4c6841ea63", 1)
+                totalPages = response.body()!!.total_pages
                 var results = response.body()!!.results
                 for (x in results!!) {
                     tvShows.add(x)
                 }
-                favorites=ViewModelProvider((activity as MainActivity))[FavoriteManager::class.java]
-                var f=favorites
+                favorites = ViewModelProvider((activity as MainActivity))[FavoriteManager::class.java]
+                var f = favorites
                 tvShowsRecyclerView.layoutManager =
                     LinearLayoutManager(context)
 
                 tvShowsRecyclerView.adapter =
-                    TVShowsAdapter(tvShows, favorites,{ tvShowID ->
+                    TVShowsAdapter(tvShows, favorites, { tvShowID ->
                         for (x in tvShows) {
                             if (x.id == tvShowID) {
                                 println(tvShowID)
@@ -71,12 +70,12 @@ class TopRatedTVShowsFragment : Fragment() {
                                 break
                             }
                         }
-                    },{
-                        tvShow->
+                    }, {
+                            tvShow ->
                         f.addTVShowFavorites(tvShow)
-                    },{ tvShow->
+                    }, { tvShow ->
                         f.deleteTVShowFavorites(tvShow)
-                    },context)
+                    }, context)
 //                tvShowsRecyclerView.onScrollBoundBot {
 //
 //                    pageCount++
@@ -100,24 +99,22 @@ class TopRatedTVShowsFragment : Fragment() {
 //                    }
 //                }
 
-                var favObserver= Observer<List<Triple<Int, String, String>>> {updated->
-                    println("Updated "+updated)
-                    var adapter=(tvShowsRecyclerView.adapter as TVShowsAdapter)
-                    adapter.fav=updated
+                var favObserver = Observer<List<Triple<Int, String, String>>> { updated ->
+                    println("Updated " + updated)
+                    var adapter = (tvShowsRecyclerView.adapter as TVShowsAdapter)
+                    adapter.fav = updated
                     adapter.notifyDataSetChanged()
                 }
-                favorites.getTVShowsFavorites().observe(viewLifecycleOwner,favObserver)
+                favorites.getTVShowsFavorites().observe(viewLifecycleOwner, favObserver)
                 shimmer.stopShimmer()
-                shimmer.visibility=View.INVISIBLE
-                tvShowsRecyclerView.visibility=View.VISIBLE
-
+                shimmer.visibility = View.INVISIBLE
+                tvShowsRecyclerView.visibility = View.VISIBLE
             }
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
     }
     companion object {
         @JvmStatic
@@ -125,5 +122,3 @@ class TopRatedTVShowsFragment : Fragment() {
             TopRatedTVShowsFragment()
     }
 }
-
-

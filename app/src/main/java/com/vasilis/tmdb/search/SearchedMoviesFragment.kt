@@ -9,19 +9,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.vasilis.tmdb.favorites.FavoriteManager
 import com.vasilis.tmdb.MainActivity
-import com.vasilis.tmdb.movie.MoviesAdapter
 import com.vasilis.tmdb.MyApi
 import com.vasilis.tmdb.TMDB
+import com.vasilis.tmdb.favorites.FavoriteManager
 import com.vasilis.tmdb.movie.MovieFragment
+import com.vasilis.tmdb.movie.MoviesAdapter
 import com.vasilis.tmdb.top_rated_movies.TopRatedMoviesView
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class SearchedMoviesFragment:Fragment() {
+class SearchedMoviesFragment : Fragment() {
     lateinit var movies: MutableList<TMDB.MovieBasic>
-    var searchMovie=""
+    var searchMovie = ""
     object RetrofitHelper {
         private const val baseUrl = "https://api.themoviedb.org/3/search/"
         fun getInstance(): Retrofit {
@@ -33,33 +33,33 @@ class SearchedMoviesFragment:Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            searchMovie=it.getString("searchMovie")!!
+            searchMovie = it.getString("searchMovie")!!
         }
         movies = mutableListOf()
-
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.context.let {
         TopRatedMoviesView(it).apply {
             val myApi = SearchedTVShowsFragment.RetrofitHelper.getInstance().create(MyApi::class.java)
             lifecycleScope.launchWhenResumed {
                 shimmer.startShimmer()
-                var response= myApi.searchMovie("287f6ab6616e3724955e2b4c6841ea63",searchMovie)
-                title.text= "Searched \"$searchMovie\""
-                var pages=response.body()!!.total_pages
+                var response = myApi.searchMovie("287f6ab6616e3724955e2b4c6841ea63", searchMovie)
+                title.text = "Searched \"$searchMovie\""
+                var pages = response.body()!!.total_pages
                 var result = response.body()!!.results
                 for (x in result!!) {
                     movies.add(x)
                 }
 
-                var favorites= ViewModelProvider((activity as MainActivity))[FavoriteManager::class.java]
+                var favorites = ViewModelProvider((activity as MainActivity))[FavoriteManager::class.java]
                 moviesRecyclerView.layoutManager =
                     LinearLayoutManager(context)
                 moviesRecyclerView.adapter =
-                    MoviesAdapter(movies, favorites){ movieID ->
+                    MoviesAdapter(movies, favorites) { movieID ->
                         for (x in movies) {
                             if (x.id == movieID) {
                                 println(movieID)
@@ -77,26 +77,25 @@ class SearchedMoviesFragment:Fragment() {
                         }
                     }
 
+                var favObserver = Observer<List<Triple<Int, String, String>>> { updated ->
 
-                var favObserver= Observer<List<Triple<Int, String, String>>> {updated->
-
-                    var adapter=(moviesRecyclerView.adapter as MoviesAdapter)
-                    //adapter.fav=updated
+                    var adapter = (moviesRecyclerView.adapter as MoviesAdapter)
+                    // adapter.fav=updated
                     adapter.notifyDataSetChanged()
                 }
-                favorites.getMoviesFavorites().observe(viewLifecycleOwner,favObserver)
+                favorites.getMoviesFavorites().observe(viewLifecycleOwner, favObserver)
                 shimmer.stopShimmer()
-                shimmer.visibility=View.INVISIBLE
-                moviesRecyclerView.visibility=View.VISIBLE
+                shimmer.visibility = View.INVISIBLE
+                moviesRecyclerView.visibility = View.VISIBLE
             }
         }
     }
-    companion object{
+    companion object {
         @JvmStatic
         fun newInstance(searchMovie: String) =
             SearchedMoviesFragment().apply {
                 arguments = Bundle().apply {
-                    putString("searchMovie",searchMovie)
+                    putString("searchMovie", searchMovie)
                 }
             }
     }

@@ -18,15 +18,14 @@ import com.vasilis.tmdb.views.ReviewsView
 
 class MovieReviewsFragment : Fragment() {
     var movieID = 0
-    var movieTitle=""
+    var movieTitle = ""
     lateinit var movieReviews: TMDB.Reviews
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             movieID = it.getInt("movieID")
-            movieTitle= it.getString("movieTitle")!!
+            movieTitle = it.getString("movieTitle")!!
 
             println("On create $movieID $movieTitle")
         }
@@ -41,34 +40,33 @@ class MovieReviewsFragment : Fragment() {
         lifecycleScope.launchWhenResumed {
             val response = myApi.getMovieReviews(movieID)
             movieReviews = response.body()!!
-            title.text= "$movieTitle reviews"
+            title.text = "$movieTitle reviews"
 
             var reviewView: ReviewsView.ReviewView
-            for((i,x) in movieReviews.results.withIndex()){
-                reviewView= ReviewsView.ReviewView(context)
+            for ((i, x) in movieReviews.results.withIndex()) {
+                reviewView = ReviewsView.ReviewView(context)
                 reviewView.apply {
-                    layoutParams= LinearLayout.LayoutParams(MATCH_PARENT,WRAP_CONTENT)
+                    layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 }
-                reviewView.author.title.text="Author"
-                reviewView.author.desc.text=x.author
-                reviewView.content.title.text="Content"
-                reviewView.content.desc.text=x.content
-                reviewView.createdAt.title.text="Created at"
-                reviewView.createdAt.desc.text=x.created_at
-                reviewView.updatedAt.title.text="Updated at"
-                reviewView.updatedAt.desc.text=x.updated_at
-                reviewView.url.title.text="URL"
-                reviewView.url.desc.text=x.url
+                reviewView.author.title.text = "Author"
+                reviewView.author.desc.text = x.author
+                reviewView.content.title.text = "Content"
+                reviewView.content.desc.text = x.content
+                reviewView.createdAt.title.text = "Created at"
+                reviewView.createdAt.desc.text = x.created_at
+                reviewView.updatedAt.title.text = "Updated at"
+                reviewView.updatedAt.desc.text = x.updated_at
+                reviewView.url.title.text = "URL"
+                reviewView.url.desc.text = x.url
 
                 linLayout.addView(reviewView)
-
             }
 
-            if(movieReviews.results.isEmpty()){
-                var noReviews= TextView(context)
-                noReviews.apply{
+            if (movieReviews.results.isEmpty()) {
+                var noReviews = TextView(context)
+                noReviews.apply {
                     setTextColor(Color.BLACK)
-                    text="No reviews"
+                    text = "No reviews"
                 }
                 linLayout.addView(noReviews)
             }
@@ -77,11 +75,11 @@ class MovieReviewsFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(id: Int,title:String) =
+        fun newInstance(id: Int, title: String) =
             MovieReviewsFragment().apply {
                 arguments = Bundle().apply {
                     putInt("movieID", id)
-                    putString("movieTitle",title)
+                    putString("movieTitle", title)
                 }
             }
     }

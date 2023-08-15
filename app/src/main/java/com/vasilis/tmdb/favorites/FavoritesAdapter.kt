@@ -8,7 +8,7 @@ import com.vasilis.tmdb.R
 class FavoritesAdapter(
     var type: Int,
     var favorites: FavoriteManager,
-    val binClickListener: (Triple<Int,String,String>) -> Unit,
+    val binClickListener: (Triple<Int, String, String>) -> Unit,
     val itemClickListener: (Int) -> Unit
 
 ) : RecyclerView.Adapter<FavoritesAdapter.FavoritesViewHolder>() {
@@ -16,15 +16,13 @@ class FavoritesAdapter(
     class FavoritesViewHolder(val view: FavoritesRecyclerViewItem) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesViewHolder {
-
         return FavoritesViewHolder(FavoritesRecyclerViewItem(parent.context))
     }
-
 
     override fun getItemCount(): Int {
         var size = 0
         size = if (type == 1) {
-           favorites.getTVShowsFavorites().value!!.size
+            favorites.getTVShowsFavorites().value!!.size
         } else {
             favorites.getMoviesFavorites().value!!.size
         }
@@ -32,7 +30,6 @@ class FavoritesAdapter(
     }
 
     override fun onBindViewHolder(holder: FavoritesViewHolder, position: Int) {
-
         holder.view.apply {
             if (position % 2 == 0) {
                 holder.view.setBackgroundResource(R.color.gray_1)
@@ -41,9 +38,9 @@ class FavoritesAdapter(
             }
         }
         "${(position + 1)} ".also { holder.view.pos.text = it }
-        if(type==1){
+        if (type == 1) {
             var tvShow = favorites.getTVShowsFavorites().value!![position]
-            holder.view.name.text=tvShow.second
+            holder.view.name.text = tvShow.second
             holder.view.image.load("https://image.tmdb.org/t/p/w154" + tvShow.third)
             holder.itemView.setOnClickListener {
                 itemClickListener(tvShow.first)
@@ -51,10 +48,9 @@ class FavoritesAdapter(
             holder.view.delete.setOnClickListener {
                 binClickListener(tvShow)
             }
-        }
-        else{
+        } else {
             var movie = favorites.getMoviesFavorites().value!![position]
-            holder.view.name.text=movie.second
+            holder.view.name.text = movie.second
             holder.view.image.load("https://image.tmdb.org/t/p/w154" + movie.third)
             holder.itemView.setOnClickListener {
                 itemClickListener(movie.first)
@@ -63,7 +59,5 @@ class FavoritesAdapter(
                 binClickListener(movie)
             }
         }
-
-
     }
 }

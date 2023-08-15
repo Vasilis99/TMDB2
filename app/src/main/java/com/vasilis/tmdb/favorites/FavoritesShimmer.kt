@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.vasilis.tmdb.MyItemDecoration
 import com.facebook.shimmer.ShimmerFrameLayout
+import com.vasilis.tmdb.MyItemDecoration
 
 class FavoritesShimmer(context: Context) : ShimmerFrameLayout(context) {
     var tvShowsTitle = TextView(context).apply {
@@ -78,7 +78,5 @@ class FavoritesShimmer(context: Context) : ShimmerFrameLayout(context) {
         conLayout.addView(tvShowsRecyclerView)
         conLayout.addView(moviesTitle)
         conLayout.addView(moviesRecyclerView)
-
-
     }
 }

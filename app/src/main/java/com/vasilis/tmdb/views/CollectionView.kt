@@ -11,7 +11,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 
-
 class CollectionView(context: Context) : ConstraintLayout(context) {
     var title = TextView(context).apply {
         id = View.generateViewId()
@@ -42,7 +41,6 @@ class CollectionView(context: Context) : ConstraintLayout(context) {
             startToStart = this@CollectionView.id
             endToEnd = this@CollectionView.id
         }
-
 
         image.layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
             topToBottom = name.id

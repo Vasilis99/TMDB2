@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 
-
 class TVShowProductionCompanyViewItem(context: Context) : ConstraintLayout(context) {
     var name = TextView(context).apply {
         id = View.generateViewId()

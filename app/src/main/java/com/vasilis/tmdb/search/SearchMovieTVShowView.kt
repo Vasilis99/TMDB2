@@ -11,7 +11,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 
-
 class SearchMovieTVShowView(context: Context) : ConstraintLayout(context) {
     var title = TextView(context).apply {
         id = View.generateViewId()
@@ -68,7 +67,6 @@ class SearchMovieTVShowView(context: Context) : ConstraintLayout(context) {
         }
 
         addView(movieInputBox)
-
 
         movieButton.layoutParams = LayoutParams(400, WRAP_CONTENT).apply {
             topToBottom = tvShowButton.id

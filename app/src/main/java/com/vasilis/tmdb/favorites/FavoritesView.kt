@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vasilis.tmdb.MyItemDecoration
 import com.vasilis.tmdb.R
 
-
 class FavoritesView(context: Context) : ScrollView(context) {
     var conLay = ConstraintLayout(context)
     var tvShowsCon = ConstraintLayout(context).apply {
@@ -87,7 +86,6 @@ class FavoritesView(context: Context) : ScrollView(context) {
 
         conLay.addView(tvShowsRecyclerView)
         tvShowsRecyclerView.visibility = GONE
-
 
         moviesCon.layoutParams = ConstraintLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
             topToBottom = tvShowsRecyclerView.id

@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 
-public class FavoriteManager(val app: Application) : AndroidViewModel(app) {
+class FavoriteManager(val app: Application) : AndroidViewModel(app) {
     private var favTvShows = MutableLiveData<List<Triple<Int, String, String>>>()
     private var favMovies = MutableLiveData<List<Triple<Int, String, String>>>()
     private fun storeMovieFavorites(movie: Triple<Int, String, String>) {

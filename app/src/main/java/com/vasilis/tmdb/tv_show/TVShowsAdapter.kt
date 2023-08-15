@@ -4,10 +4,10 @@ import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.vasilis.tmdb.favorites.FavoriteManager
-import com.vasilis.tmdb.TMDB
-import com.vasilis.tmdb.views.RecyclerViewItemView
 import com.vasilis.tmdb.R
+import com.vasilis.tmdb.TMDB
+import com.vasilis.tmdb.favorites.FavoriteManager
+import com.vasilis.tmdb.views.MovieTVShowItem
 
 class TVShowsAdapter(
     private var tvShows: MutableList<TMDB.TVShowBasic>,
@@ -20,12 +20,11 @@ class TVShowsAdapter(
     var listTVShows: MutableList<TMDB.TVShowBasic> = tvShows
     var fav: List<Triple<Int, String, String>> = favorites.getTVShowsFavorites().value!!
 
-    class TVShowsViewHolder(val view: RecyclerViewItemView) : RecyclerView.ViewHolder(view)
+    class TVShowsViewHolder(val view: MovieTVShowItem) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TVShowsViewHolder {
-        return TVShowsViewHolder(RecyclerViewItemView(parent.context))
+        return TVShowsViewHolder(MovieTVShowItem(parent.context))
     }
-
 
     override fun getItemCount(): Int {
         return listTVShows.size
@@ -40,11 +39,9 @@ class TVShowsAdapter(
             }
         }
 
-
-
-            holder.view.image.load("https://image.tmdb.org/t/p/w342" + listTVShows[position].poster_path) {
-                placeholder(R.drawable.my_placeholder)
-            }
+        holder.view.image.load("https://image.tmdb.org/t/p/w342" + listTVShows[position].poster_path) {
+            placeholder(R.drawable.my_placeholder)
+        }
 
         "${(position + 1)} ".also { holder.view.pos.text = it }
         holder.view.title.text = listTVShows[position].name
@@ -52,7 +49,6 @@ class TVShowsAdapter(
         holder.view.voteCount.text = "Votes: " + listTVShows[position].vote_count.toString()
         holder.view.overview.text = listTVShows[position].overview
         holder.view.favorite.isChecked = fav.find { it.first == listTVShows[position].id } != null
-
 
         val checkBox = holder.view.favorite
         checkBox.setOnClickListener {
@@ -65,7 +61,6 @@ class TVShowsAdapter(
             if (checkBox.isChecked) {
                 add(tvShow)
             } else {
-
                 del(tvShow)
             }
         }
@@ -76,5 +71,4 @@ class TVShowsAdapter(
 
         println(holder.view.image.height.toString() + "\n" + holder.view.image.width)
     }
-
 }

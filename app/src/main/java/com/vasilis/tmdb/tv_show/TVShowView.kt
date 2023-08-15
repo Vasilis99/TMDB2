@@ -25,20 +25,22 @@ class TVShowView(context: Context) : ScrollView(context) {
         recyclerView.layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
         recyclerView.addItemDecoration(MyItemDecoration(10, 10, 0, 20))
 
-        tvShowViews.add(TextView(context).apply {
-            id = View.generateViewId()
-            typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.BLACK)
-            textSize = 22F
-        })
+        tvShowViews.add(
+            TextView(context).apply {
+                id = View.generateViewId()
+                typeface = Typeface.DEFAULT_BOLD
+                setTextColor(Color.BLACK)
+                textSize = 22F
+            }
+        )
 
-
-        tvShowViews.add(ImageView(context).apply {
-            id = View.generateViewId()
-            scaleType = ScaleType.FIT_CENTER
-        })
+        tvShowViews.add(
+            ImageView(context).apply {
+                id = View.generateViewId()
+                scaleType = ScaleType.FIT_CENTER
+            }
+        )
         tvShowViews.add(SpecialView(context))
-
 
         for (i in 3..10) {
             tvShowViews.add(TitleDescriptionView(context).vertical())
@@ -55,11 +57,13 @@ class TVShowView(context: Context) : ScrollView(context) {
             tvShowViews.add(TitleDescriptionView(context).vertical())
         }
 
-        tvShowViews.add(Button(context).apply {
-            id = View.generateViewId()
-            text = "Reviews"
-            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-        })
+        tvShowViews.add(
+            Button(context).apply {
+                id = View.generateViewId()
+                text = "Reviews"
+                layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+            }
+        )
         linearLayout.apply {
             orientation = LinearLayout.VERTICAL
             layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
@@ -89,5 +93,4 @@ class TVShowView(context: Context) : ScrollView(context) {
 
         addView(tvShowsShimmer)
     }
-
 }

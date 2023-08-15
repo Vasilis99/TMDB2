@@ -1,6 +1,5 @@
 package com.vasilis.tmdb.movie
 
-
 import android.content.Context
 import android.graphics.Color
 import android.view.View
@@ -9,13 +8,11 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-
 import com.facebook.shimmer.ShimmerFrameLayout
 
 class MovieShimmer(context: Context) : ShimmerFrameLayout(context) {
     var tvShowViews: MutableList<View> = mutableListOf()
     var linearLayout = LinearLayout(context).apply { id = View.generateViewId() }
-
 
     private fun myShimmer(): ConstraintLayout {
         var conLay = ConstraintLayout(context).apply { id = View.generateViewId() }
@@ -28,7 +25,6 @@ class MovieShimmer(context: Context) : ShimmerFrameLayout(context) {
         title.layoutParams = ConstraintLayout.LayoutParams(200, WRAP_CONTENT).apply {
             topToTop = conLay.id
             startToStart = conLay.id
-
         }
         desc.setBackgroundColor(Color.GRAY)
         desc.layoutParams = ConstraintLayout.LayoutParams(200, WRAP_CONTENT).apply {
@@ -103,22 +99,25 @@ class MovieShimmer(context: Context) : ShimmerFrameLayout(context) {
         apply { id = View.generateViewId() }
         layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
 
-        tvShowViews.add(TextView(context).apply {
-            id = View.generateViewId()
-            textSize = 22F
-            setBackgroundColor(Color.GRAY)
-        })
+        tvShowViews.add(
+            TextView(context).apply {
+                id = View.generateViewId()
+                textSize = 22F
+                setBackgroundColor(Color.GRAY)
+            }
+        )
 
         tvShowViews.add(myShimmer())
 
-        tvShowViews.add(ConstraintLayout(context).apply {
-            id = View.generateViewId()
-        }.apply {
-            setBackgroundColor(Color.GRAY)
-            layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-
-        })
-        //tvShowViews.add(creators())
+        tvShowViews.add(
+            ConstraintLayout(context).apply {
+                id = View.generateViewId()
+            }.apply {
+                setBackgroundColor(Color.GRAY)
+                layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+            }
+        )
+        // tvShowViews.add(creators())
 
         for (i in 3..10) {
             tvShowViews.add(myShimmer())
@@ -134,6 +133,5 @@ class MovieShimmer(context: Context) : ShimmerFrameLayout(context) {
         }
 
         addView(linearLayout)
-
     }
 }

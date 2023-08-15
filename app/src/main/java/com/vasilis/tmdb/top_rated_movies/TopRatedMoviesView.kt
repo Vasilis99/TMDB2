@@ -1,17 +1,16 @@
 package com.vasilis.tmdb.top_rated_movies
 
-import android.widget.TextView
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.vasilis.tmdb.MyItemDecoration
 import com.vasilis.tmdb.views.shimmer.RecyclerViewShimmer
-
 
 class TopRatedMoviesView(context: Context) : ConstraintLayout(context) {
     val title = TextView(context).apply {
@@ -44,7 +43,6 @@ class TopRatedMoviesView(context: Context) : ConstraintLayout(context) {
                 startToStart = this@TopRatedMoviesView.id
                 endToEnd = this@TopRatedMoviesView.id
                 bottomToBottom = this@TopRatedMoviesView.id
-
             }
         moviesRecyclerView.addItemDecoration(MyItemDecoration(20, 20, 20, 0))
 
@@ -58,6 +56,5 @@ class TopRatedMoviesView(context: Context) : ConstraintLayout(context) {
         moviesRecyclerView.visibility = INVISIBLE
         addView(moviesRecyclerView)
         addView(shimmer)
-
     }
 }

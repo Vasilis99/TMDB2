@@ -1,6 +1,6 @@
-package com.vasilis.tmdb.views.shimmer//package com.axiom.tmdb.views
+package com.vasilis.tmdb.views.shimmer // package com.axiom.tmdb.views
 //
-//import android.content.Context
+// import android.content.Context
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
@@ -11,9 +11,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.vasilis.tmdb.MyItemDecoration
 import com.facebook.shimmer.ShimmerFrameLayout
 
 class RecyclerViewShimmer(context: Context) : ShimmerFrameLayout(context) {
@@ -21,6 +18,7 @@ class RecyclerViewShimmer(context: Context) : ShimmerFrameLayout(context) {
     var linearViewShimmer = LinearLayout(context).apply {
         id = View.generateViewId()
         orientation = LinearLayout.VERTICAL
+        LayoutParams(MATCH_PARENT, MATCH_PARENT)
     }
 
     private fun createItem(): ConstraintLayout {
@@ -108,14 +106,23 @@ class RecyclerViewShimmer(context: Context) : ShimmerFrameLayout(context) {
         return conLayBig
     }
 
-
     init {
         var listConLay = mutableListOf<ConstraintLayout>()
         for (i in 0..9) {
             listConLay.add(createItem())
         }
-
+        var title = TextView(context).apply {
+            textSize = 14F
+            layoutParams = LinearLayout.LayoutParams(100, WRAP_CONTENT).apply {
+                setMargins(0, 0, 0, 10)
+            }
+        }
+        linearViewShimmer.addView(title)
         for (i in 0..9) {
+            var shimmer = listConLay[i]
+            shimmer.layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
+                setMargins(0, 0, 0, 10)
+            }
             linearViewShimmer.addView(listConLay[i])
         }
 

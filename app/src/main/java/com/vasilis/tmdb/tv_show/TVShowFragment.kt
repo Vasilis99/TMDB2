@@ -21,7 +21,6 @@ import com.vasilis.tmdb.*
 import com.vasilis.tmdb.views.SpecialView
 import com.vasilis.tmdb.views.TitleDescriptionView
 
-
 class TVShowFragment : Fragment() {
     private var tID: Int = 0
     private lateinit var tvShowDetails: TMDB.TVShowDetails
@@ -32,13 +31,12 @@ class TVShowFragment : Fragment() {
         val bundle = arguments
         if (bundle != null && bundle.containsKey("tvShowID")) {
             tID = bundle.getInt("tvShowID")
-
         } else if (bundle == null) {
-            Toast.makeText(activity, "Error", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, "Error", Toast.LENGTH_LONG).show()
         }
 
-        //val latestFragment= ViewModelProvider(this)[FragmentsViewModel::class.java]
-       // latestFragment.addFragment(this)
+        // val latestFragment= ViewModelProvider(this)[FragmentsViewModel::class.java]
+        // latestFragment.addFragment(this)
     }
 
     override fun onDestroy() {
@@ -48,23 +46,24 @@ class TVShowFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = TVShowView(inflater.context).apply {
         lifecycleScope.launchWhenResumed {
-           tvShowsShimmer.startShimmer()
+            tvShowsShimmer.startShimmer()
             val myApi = RetrofitHelper.getInstance().create(MyApi::class.java)
             var response = myApi.getTVShowDetails(tID)
             tvShowDetails = response.body()!!
             (tvShowViews[0] as TextView).text = tvShowDetails.name
-            var image=tvShowViews[1] as ImageView
+            var image = tvShowViews[1] as ImageView
 
-            image.load("https://image.tmdb.org/t/p/original" + tvShowDetails.backdrop_path){
+            image.load("https://image.tmdb.org/t/p/original" + tvShowDetails.backdrop_path) {
                 placeholder(R.drawable.my_placeholder)
             }
-            println("height="+image.height+"\nwidth="+image.width)
+            println("height=" + image.height + "\nwidth=" + image.width)
             var createdBy = tvShowViews[2] as SpecialView
-            createdBy.title.text="Creators"
+            createdBy.title.text = "Creators"
             if (tvShowDetails.created_by.isEmpty()) {
                 createdBy.addView(createdBy.unknown)
             } else {
@@ -75,11 +74,12 @@ class TVShowFragment : Fragment() {
                     TVShowCreatorAdapter(tvShowDetails.created_by)
             }
             var epRunTimeString = ""
-            for ((i,x) in tvShowDetails.episode_run_time.withIndex()) {
-                epRunTimeString +=if(i!=tvShowDetails.episode_run_time.size-1) "$x\n" else x
+            for ((i, x) in tvShowDetails.episode_run_time.withIndex()) {
+                epRunTimeString += if (i != tvShowDetails.episode_run_time.size - 1) "$x\n" else x
             }
-            if(tvShowDetails.episode_run_time.isEmpty())
-                epRunTimeString="Unknown"
+            if (tvShowDetails.episode_run_time.isEmpty()) {
+                epRunTimeString = "Unknown"
+            }
             var epRunTime = (tvShowViews[3] as TitleDescriptionView)
             epRunTime.title.text = "Episode run time"
             epRunTime.desc.text = epRunTimeString
@@ -88,8 +88,8 @@ class TVShowFragment : Fragment() {
             firstAirDate.desc.text = tvShowDetails.first_air_date
 
             var genresString = ""
-            for ((i,x) in tvShowDetails.genres.withIndex()) {
-                genresString += if(i!=tvShowDetails.genres.size-1) "${x.name}\n" else x.name
+            for ((i, x) in tvShowDetails.genres.withIndex()) {
+                genresString += if (i != tvShowDetails.genres.size - 1) "${x.name}\n" else x.name
             }
             var genres = tvShowViews[5] as TitleDescriptionView
             genres.title.text = "Genres"
@@ -98,8 +98,8 @@ class TVShowFragment : Fragment() {
             homepage.title.text = "Homepage"
 
             val spannableString = SpannableString("Go to homepage")
-            spannableString.setSpan(UnderlineSpan(),0,spannableString.length,0)
-            homepage.desc.apply{setTextColor(Color.BLUE)}
+            spannableString.setSpan(UnderlineSpan(), 0, spannableString.length, 0)
+            homepage.desc.apply { setTextColor(Color.BLUE) }
             homepage.desc.text = spannableString
             homepage.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(tvShowDetails.homepage)))
@@ -112,8 +112,8 @@ class TVShowFragment : Fragment() {
             production.desc.text = (if (tvShowDetails.inProduction) "Yes" else "No")
 
             var lang = ""
-            for ((i,x) in tvShowDetails.languages.withIndex()) {
-                lang += if(i!=tvShowDetails.languages.size-1) "${x}\n" else x
+            for ((i, x) in tvShowDetails.languages.withIndex()) {
+                lang += if (i != tvShowDetails.languages.size - 1) "${x}\n" else x
             }
             var languages = tvShowViews[9] as TitleDescriptionView
             languages.title.text = "languages"
@@ -123,7 +123,7 @@ class TVShowFragment : Fragment() {
             lastAirDate.title.text = "Last air date"
             lastAirDate.desc.text = tvShowDetails.last_air_date
             var lastEpisodeAir = tvShowViews[11] as TVShowLastEpisodeView
-            lastEpisodeAir.title.text="Last Episode to Air"
+            lastEpisodeAir.title.text = "Last Episode to Air"
             if (tvShowDetails.last_episode_to_air != null) {
                 var airDate = lastEpisodeAir.lastEpViews[0] as TitleDescriptionView
                 airDate.title.text = "Air Date"
@@ -154,155 +154,145 @@ class TVShowFragment : Fragment() {
                 lastEpisodeOverview.title.text = "Overview"
                 lastEpisodeOverview.desc.text = tvShowDetails.last_episode_to_air.overview
 
-                lastEpisodeAir.image.load("https://image.tmdb.org/t/p/original" + tvShowDetails.last_episode_to_air.still_path){
-
+                lastEpisodeAir.image.load("https://image.tmdb.org/t/p/original" + tvShowDetails.last_episode_to_air.still_path) {
                 }
 
                 lastEpisodeAir.addView(lastEpisodeAir.scrollView)
-
-
             } else {
                 lastEpisodeAir.addView(lastEpisodeAir.unknown)
             }
 
             var networks = tvShowViews[12] as TitleDescriptionView
             networks.title.text = "Networks"
-            var networksString=""
+            var networksString = ""
 
-           for ((i,x) in tvShowDetails.networks.withIndex()) {
-               networksString += if(i!=tvShowDetails.networks.size-1){
-                   x.name+"\n"
-               } else{
-                   x.name
-               }
-           }
-            if(tvShowDetails.networks.isEmpty()){
-                networks.desc.text="Unknown"
+            for ((i, x) in tvShowDetails.networks.withIndex()) {
+                networksString += if (i != tvShowDetails.networks.size - 1) {
+                    x.name + "\n"
+                } else {
+                    x.name
+                }
             }
-            else{
-                networks.desc.text=networksString
+            if (tvShowDetails.networks.isEmpty()) {
+                networks.desc.text = "Unknown"
+            } else {
+                networks.desc.text = networksString
             }
-            var numberOfEpisodes=tvShowViews[13] as TitleDescriptionView
-            numberOfEpisodes.title.text="Number of episodes"
-            numberOfEpisodes.desc.text=tvShowDetails.number_of_episodes.toString()
+            var numberOfEpisodes = tvShowViews[13] as TitleDescriptionView
+            numberOfEpisodes.title.text = "Number of episodes"
+            numberOfEpisodes.desc.text = tvShowDetails.number_of_episodes.toString()
 
-            var numberOfSeasons=tvShowViews[14] as TitleDescriptionView
-            numberOfSeasons.title.text="Number of seasons"
-            numberOfSeasons.desc.text=tvShowDetails.number_of_seasons.toString()
+            var numberOfSeasons = tvShowViews[14] as TitleDescriptionView
+            numberOfSeasons.title.text = "Number of seasons"
+            numberOfSeasons.desc.text = tvShowDetails.number_of_seasons.toString()
 
             var originCountries = tvShowViews[15] as TitleDescriptionView
             originCountries.title.text = "Origin country"
-            var countriesString=""
+            var countriesString = ""
 
-            for ((i,x) in tvShowDetails.origin_country.withIndex()) {
-                countriesString += if(i!=tvShowDetails.origin_country.size-1){
-                    x+"\n"
-                } else{
+            for ((i, x) in tvShowDetails.origin_country.withIndex()) {
+                countriesString += if (i != tvShowDetails.origin_country.size - 1) {
+                    x + "\n"
+                } else {
                     x
                 }
             }
-            if(tvShowDetails.origin_country.isEmpty()){
-                originCountries.desc.text="Unknown"
-            }
-            else{
-                originCountries.desc.text=countriesString
+            if (tvShowDetails.origin_country.isEmpty()) {
+                originCountries.desc.text = "Unknown"
+            } else {
+                originCountries.desc.text = countriesString
             }
             var originalLanguage = tvShowViews[16] as TitleDescriptionView
             originalLanguage.title.text = "Original language"
-            originalLanguage.desc.text=tvShowDetails.original_language
+            originalLanguage.desc.text = tvShowDetails.original_language
 
             var overview = tvShowViews[17] as TitleDescriptionView
             overview.title.text = "Overview"
-            overview.desc.text=tvShowDetails.overview
+            overview.desc.text = tvShowDetails.overview
 
             var popularity = tvShowViews[18] as TitleDescriptionView
             popularity.title.text = "Popularity"
-            popularity.desc.text=tvShowDetails.popularity.toString()
+            popularity.desc.text = tvShowDetails.popularity.toString()
 
             var poster = tvShowViews[19] as ImageView
 
-            poster.load("https://image.tmdb.org/t/p/original" + tvShowDetails.poster_path){
+            poster.load("https://image.tmdb.org/t/p/original" + tvShowDetails.poster_path) {
                 placeholder(R.drawable.my_placeholder)
             }
 
             var productionCompanies = (tvShowViews[20] as SpecialView)
-            productionCompanies.title.text="Production companies"
+            productionCompanies.title.text = "Production companies"
             if (tvShowDetails.production_companies.isEmpty()) {
                 productionCompanies.addView(productionCompanies.unknown)
-
             } else {
                 productionCompanies.addView(productionCompanies.recyclerView)
                 productionCompanies.recyclerView.layoutManager =
                     LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 productionCompanies.recyclerView.adapter =
                     TVShowProductionCompanyAdapter(tvShowDetails.production_companies)
-
             }
 
-            var productionCountries=tvShowViews[21] as TitleDescriptionView
-            productionCountries.title.text="Production countries"
-            var prodCountStr=""
+            var productionCountries = tvShowViews[21] as TitleDescriptionView
+            productionCountries.title.text = "Production countries"
+            var prodCountStr = ""
 
-            for ((i,x) in tvShowDetails.production_countries.withIndex()) {
-                prodCountStr += if(i!=tvShowDetails.production_countries.size-1){
-                    x.name+"\n"
-                } else{
+            for ((i, x) in tvShowDetails.production_countries.withIndex()) {
+                prodCountStr += if (i != tvShowDetails.production_countries.size - 1) {
+                    x.name + "\n"
+                } else {
                     x.name
                 }
             }
-            if(tvShowDetails.production_countries.isEmpty()){
-                productionCountries.desc.text="Unknown"
-            }
-            else{
-                productionCountries.desc.text=prodCountStr
+            if (tvShowDetails.production_countries.isEmpty()) {
+                productionCountries.desc.text = "Unknown"
+            } else {
+                productionCountries.desc.text = prodCountStr
             }
 
-            var spokenLanguages=tvShowViews[22] as TitleDescriptionView
-            spokenLanguages.title.text="Spoken languages"
-            var spokenLangStr=""
+            var spokenLanguages = tvShowViews[22] as TitleDescriptionView
+            spokenLanguages.title.text = "Spoken languages"
+            var spokenLangStr = ""
 
-            for ((i,x) in tvShowDetails.spoken_languages.withIndex()) {
-                spokenLangStr += if(i!=tvShowDetails.spoken_languages.size-1){
-                    x.english_name+"\n"
-                } else{
+            for ((i, x) in tvShowDetails.spoken_languages.withIndex()) {
+                spokenLangStr += if (i != tvShowDetails.spoken_languages.size - 1) {
+                    x.english_name + "\n"
+                } else {
                     x.english_name
                 }
             }
-            if(tvShowDetails.spoken_languages.isEmpty()){
-                spokenLanguages.desc.text="Unknown"
+            if (tvShowDetails.spoken_languages.isEmpty()) {
+                spokenLanguages.desc.text = "Unknown"
+            } else {
+                spokenLanguages.desc.text = spokenLangStr
             }
-            else{
-                spokenLanguages.desc.text=spokenLangStr
-            }
 
+            var status = tvShowViews[23] as TitleDescriptionView
+            status.title.text = "Status"
+            status.desc.text = tvShowDetails.status
 
-            var status=tvShowViews[23] as TitleDescriptionView
-            status.title.text="Status"
-            status.desc.text=tvShowDetails.status
+            var tagline = tvShowViews[24] as TitleDescriptionView
+            tagline.title.text = "Tagline"
+            tagline.desc.text = tvShowDetails.tagline
 
-            var tagline=tvShowViews[24] as TitleDescriptionView
-            tagline.title.text="Tagline"
-            tagline.desc.text=tvShowDetails.tagline
+            var type = tvShowViews[25] as TitleDescriptionView
+            type.title.text = "Type"
+            type.desc.text = tvShowDetails.type
 
-            var type=tvShowViews[25] as TitleDescriptionView
-            type.title.text="Type"
-            type.desc.text=tvShowDetails.type
+            var voteAverage = tvShowViews[26] as TitleDescriptionView
+            voteAverage.title.text = "Vote average"
+            voteAverage.desc.text = tvShowDetails.vote_average.toString()
 
-            var voteAverage=tvShowViews[26] as TitleDescriptionView
-            voteAverage.title.text="Vote average"
-            voteAverage.desc.text=tvShowDetails.vote_average.toString()
+            var voteCount = tvShowViews[27] as TitleDescriptionView
+            voteCount.title.text = "Vote count"
+            voteCount.desc.text = tvShowDetails.vote_count.toString()
 
-            var voteCount=tvShowViews[27] as TitleDescriptionView
-            voteCount.title.text="Vote count"
-            voteCount.desc.text=tvShowDetails.vote_count.toString()
-
-            var button=tvShowViews[28] as Button
+            var button = tvShowViews[28] as Button
             tvShowsShimmer.stopShimmer()
             removeView(tvShowsShimmer)
             addView(linearLayout)
 
             button.setOnClickListener {
-                println(poster.width.toString()+'\n'+poster.height)
+                println(poster.width.toString() + '\n' + poster.height)
                 var tvShowReviewsFragment =
                     TVShowReviewsFragment.newInstance(tvShowDetails.id, tvShowDetails.name)
 
@@ -314,16 +304,12 @@ class TVShowFragment : Fragment() {
                     transaction?.addToBackStack(null)
                 }
             }
-
-
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
     }
-
 
     companion object {
         @JvmStatic

@@ -8,14 +8,13 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 
-
 class TVShowCreatorRecyclerViewItem(context: Context) : ConstraintLayout(context) {
-    var name = TextView(context).apply{id= View.generateViewId()}
-    var photo = ImageView(context).apply{id=View.generateViewId()}
+    var name = TextView(context).apply { id = View.generateViewId() }
+    var photo = ImageView(context).apply { id = View.generateViewId() }
 
     init {
         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-        this@TVShowCreatorRecyclerViewItem.apply{id=View.generateViewId()}
+        this@TVShowCreatorRecyclerViewItem.apply { id = View.generateViewId() }
         name.layoutParams = ConstraintLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
             topToTop = this@TVShowCreatorRecyclerViewItem.id
             startToStart = this@TVShowCreatorRecyclerViewItem.id

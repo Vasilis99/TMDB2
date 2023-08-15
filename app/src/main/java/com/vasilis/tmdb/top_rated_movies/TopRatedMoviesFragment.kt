@@ -9,20 +9,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.vasilis.tmdb.favorites.FavoriteManager
 import com.vasilis.tmdb.MainActivity
-import com.vasilis.tmdb.movie.MoviesAdapter
 import com.vasilis.tmdb.MyApi
 import com.vasilis.tmdb.RetrofitHelper
 import com.vasilis.tmdb.TMDB
+import com.vasilis.tmdb.favorites.FavoriteManager
 import com.vasilis.tmdb.movie.MovieFragment
-
+import com.vasilis.tmdb.movie.MoviesAdapter
 
 class TopRatedMoviesFragment : Fragment() {
 
     lateinit var movies: MutableList<TMDB.MovieBasic>
-    var pageCount=1
-    var totalPages=0
+    var pageCount = 1
+    var totalPages = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,25 +30,27 @@ class TopRatedMoviesFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? = inflater.context.let {
         TopRatedMoviesView(it).apply {
             val myApi = RetrofitHelper.getInstance().create(MyApi::class.java)
             lifecycleScope.launchWhenResumed {
-                title.text="Top rated Movies"
+                title.text = "Top rated Movies"
                 shimmer.startShimmer()
                 var response = myApi.getTopRatedMovies("287f6ab6616e3724955e2b4c6841ea63", 1)
-                totalPages=response.body()!!.total_pages
+                totalPages = response.body()!!.total_pages
                 var result = response.body()!!.results
                 for (x in result!!) {
                     movies.add(x)
                 }
 
-                var favorites= ViewModelProvider((activity as MainActivity))[FavoriteManager::class.java]
+                var favorites = ViewModelProvider((activity as MainActivity))[FavoriteManager::class.java]
                 moviesRecyclerView.layoutManager =
                     LinearLayoutManager(context)
                 moviesRecyclerView.adapter =
-                    MoviesAdapter(movies, favorites){ movieID ->
+                    MoviesAdapter(movies, favorites) { movieID ->
                         for (x in movies) {
                             if (x.id == movieID) {
                                 println(movieID)
@@ -88,16 +89,16 @@ class TopRatedMoviesFragment : Fragment() {
 //                    }
 //                }
 
-                var favObserver= Observer<List<Triple<Int, String, String>>> {updated->
-                    println("Updated "+updated)
-                    var adapter=(moviesRecyclerView.adapter as MoviesAdapter)
-                    //adapter.fav=updated
+                var favObserver = Observer<List<Triple<Int, String, String>>> { updated ->
+                    println("Updated " + updated)
+                    var adapter = (moviesRecyclerView.adapter as MoviesAdapter)
+                    // adapter.fav=updated
                     adapter.notifyDataSetChanged()
                 }
-                favorites.getMoviesFavorites().observe(viewLifecycleOwner,favObserver)
+                favorites.getMoviesFavorites().observe(viewLifecycleOwner, favObserver)
                 shimmer.stopShimmer()
-                shimmer.visibility=View.INVISIBLE
-                moviesRecyclerView.visibility=View.VISIBLE
+                shimmer.visibility = View.INVISIBLE
+                moviesRecyclerView.visibility = View.VISIBLE
             }
         }
     }
@@ -106,6 +107,4 @@ class TopRatedMoviesFragment : Fragment() {
         @JvmStatic
         fun newInstance() = TopRatedMoviesFragment()
     }
-
-
 }

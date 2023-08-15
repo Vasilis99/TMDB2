@@ -1,27 +1,26 @@
 package com.vasilis.tmdb
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 
-
 class MainActivity : AppCompatActivity() {
-    private lateinit var tabLayout:TabLayout
-    private lateinit var viewPager:ViewPager2
-    lateinit var myLayout:FrameLayout
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager2
+    lateinit var myLayout: FrameLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        myLayout=  FrameLayout(this)
-        myLayout.id= View.generateViewId()
+        myLayout = FrameLayout(this)
+        myLayout.id = View.generateViewId()
         setContentView(myLayout)
-        var myFragment=MyFragment()
-        supportFragmentManager.
-        beginTransaction().replace(myLayout.id, myFragment)
-              // .apply { if (backStack) addToBackStack(null) }
-                .commit()
+        var myFragment = MyFragment()
+        supportFragmentManager
+            .beginTransaction().replace(myLayout.id, myFragment)
+            // .apply { if (backStack) addToBackStack(null) }
+            .commit()
 
 //        val latestFragment= ViewModelProvider(this)[FragmentsViewModel::class.java]
 //        if(latestFragment.getFragment()!=null) {
@@ -35,15 +34,13 @@ class MainActivity : AppCompatActivity() {
 //            println("Einai null to live data")
 //        }
 
-
-
 //        tabLayout= TabLayout(this)
 //        tabLayout.id=View.generateViewId()
 //
-////        tabLayout.addTab(tabLayout.newTab().setText("Tabsd 1"))
-////        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"))
-////        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"))
-////        myLayout.addView(tabLayout)
+// //        tabLayout.addTab(tabLayout.newTab().setText("Tabsd 1"))
+// //        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"))
+// //        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"))
+// //        myLayout.addView(tabLayout)
 //
 //        viewPager=ViewPager2(this)
 //        myLayout.addView(tabLayout)
@@ -60,10 +57,6 @@ class MainActivity : AppCompatActivity() {
 //          1-> tab.text = "Top Rated Movies"
 //            2-> tab.text = "Search Movies-TV Shows"
 //        }}.attach()
-
-
-
-
     }
 
     override fun onDestroy() {
